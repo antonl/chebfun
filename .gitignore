@@ -1,0 +1,24 @@
+# Ignore C++ build artifacts.
+
+build/
+*.o
+*.so
+*.exe
+*.dll
+
+
+# Ignore Vagrant runtime files.
+
+.vagrant/
+
+
+# Ignore settings for various IDEs.
+
+.idea/
+.project/
+nbproject/
+
+
+# Ignore OS metadata files.
+
+.DS_Store
