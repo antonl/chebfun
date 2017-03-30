@@ -54,10 +54,15 @@ template <typename T> struct basic_chebfun
 
     /// Evaluate interpolant at the current point x
     value_t operator()(value_t x);
+
+
+    /// Calculate the order of polynomial used
+    size_t size() const;
 };
 
-using double_chebfun = basic_chebfun<double>;
-using float_chebfun = basic_chebfun<float>;
+/// computes the Chebyshev polynomial coefficients, with the convention that the highest coefficients are *last*
+/// This is opposite to the chebfun convention, but matches the convention for using Horner's rule
+template <typename value_t> std::vector<value_t> chebpoly(std::vector<value_t>& p);
 
 NAMESPACE_BEGIN(detail)
 const double pi = std::acos(-1);
