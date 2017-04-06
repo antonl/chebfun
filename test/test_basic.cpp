@@ -90,6 +90,43 @@ TEST(ChebfunUtils, ChebyshevPoints) {
     ASSERT_EQ(pts2.size(), 0);
 }
 
+TEST(ChebfunPoly, FirstFewPolys) {
+    size_t N = 7;
+    auto pts = detail::chebyshev_points<double>(N);
+
+    std::vector<double> values(N);
+
+    // test x^2
+    for (size_t i = 0; i < N; ++i)
+        values[i] = pts[i]*pts[i];
+
+    auto res = chebpoly(values);
+
+    // Chebyshev coefficients should be [0.5, 0, 0.5, ....]
+    for (size_t i = 0; i < N; ++i) {
+        if (i == 0 || i == 2)
+            ASSERT_LT(std::abs(res[i] - 0.5), std::numeric_limits<double>::epsilon());
+        else
+            ASSERT_LT(std::abs(res[i]), std::numeric_limits<double>::epsilon());
+    }
+
+    // test x^3
+    for (size_t i = 0; i < N; ++i)
+        values[i] = pts[i]*pts[i]*pts[i];
+
+    res = chebpoly(values);
+
+    // Chebyshev coefficients should be [0, 0.75, 0, 0.25, ....]
+    for (size_t i = 0; i < N; ++i) {
+        if (i == 1)
+            ASSERT_LT(std::abs(res[i] - 0.75), std::numeric_limits<double>::epsilon());
+        else if (i == 3)
+            ASSERT_LT(std::abs(res[i] - 0.25), std::numeric_limits<double>::epsilon());
+        else
+            ASSERT_LT(std::abs(res[i]), std::numeric_limits<double>::epsilon());
+    }
+}
+
 /// Test a sample function call.
 ///
 #if 0

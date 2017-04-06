@@ -9,7 +9,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/../cmake
 find_package(FFTW)
 include_directories(${FFTW_INCLUDES})
 
-add_subdirectory(lib/gtest)
+add_subdirectory(../ext/gtest ext/gtest)
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
 

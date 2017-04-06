@@ -88,29 +88,24 @@ template <typename value_t> size_t basic_chebfun<value_t>::size() const {
 
 //template <typename value_t> std::vector<value_t> chebpoly(const basic_chebfun<value_t>& p) {}
 
+/// Perform inverse transform from Chebyshev polynomials a_k to values of function at
+/// chebyshev points
 template <> std::vector<double> chebpoly(std::vector<double>& values) {
     auto N = values.size();
 
     if (N == 1)
         return {values[0]};
 
-    // We have to calculate the full DCT
     std::vector<double> outp(N);
-
-    // scale boundaries
-    values.front() *= 2.0;
-    values.back() *= 2.0;
 
     auto plan = fftw_plan_r2r_1d(N, values.data(), outp.data(), FFTW_REDFT00, FFTW_ESTIMATE);
     fftw_execute(plan);
     fftw_destroy_plan(plan);
 
-    // unscale boundaries
-    values.front() *= 0.5;
-    values.back() *= 0.5;
-
     // Remove the extra factor of 2 from the DCT
-    std::for_each(std::begin(values), std::end(values), [](double& v){v *= 0.5;});
+    std::for_each(std::begin(outp), std::end(outp), [N](double& v){v /= (N-1);});
+    outp.front() *= 0.5;
+    outp.back() *= 0.5;
 
     return outp;
 }
